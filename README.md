@@ -1,10 +1,10 @@
-# Maple Levels
+# MapleSkills
 
 **MapleStory Idle RPG – Skill Build Generator**
 
 Current public test build: **v0.6 – Arch Mage (Ice/Lightning)**
 
-Maple Levels generates scenario-specific skill builds for your current character level.
+MapleSkills generates scenario-specific skill builds for your current character level.
 The I/L Mage test build supports **Level 1 through Level 125** and progressively
 changes the available build as skills unlock.
 
@@ -15,7 +15,7 @@ Click **Code → Download ZIP** on this GitHub repository.
 ## Run
 
 1. Extract the downloaded ZIP.
-2. Double-click `Run_MapleLevels_ILM_v0.6.bat`.
+2. Double-click `Run_MapleSkills_ILM_v0.6.bat`.
 3. Choose your current level.
 4. Click **GENERATE SKILL BUILDS**.
 5. A `.txt` build is generated and selected in Explorer.
@@ -61,6 +61,3 @@ real-player testing.
 - https://idle.maplestorywiki.net/w/Arch_Mage_%28Ice_Lightning%29/Skills
 
 Unofficial community tool. MapleStory and related names belong to their respective owners.
-
-
-> Publisher FIX3: handles a brand-new local Git repo with no commits/main branch yet.
