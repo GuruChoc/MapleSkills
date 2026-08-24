@@ -3,7 +3,7 @@ setlocal
 title Maple Levels - I/L Mage Guild Tester
 cd /d "%~dp0"
 
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0MapleLevels_ILM_v0.6.ps1"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0MapleSkills_ILM_v0.6.ps1"
 
 if errorlevel 1 (
     echo.

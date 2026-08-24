@@ -171,7 +171,7 @@ function Get-OutputFolder {
         return $maple
     }
 
-    $downloads = Join-Path $env:USERPROFILE "Downloads\MapleLevels"
+    $downloads = Join-Path $env:USERPROFILE "Downloads\MapleSkills"
     New-Item -ItemType Directory -Force -Path $downloads | Out-Null
     return $downloads
 }
@@ -179,7 +179,7 @@ function Get-OutputFolder {
 function Make-Report([int]$Level) {
     $lines = New-Object System.Collections.Generic.List[string]
     $lines.Add("MAPLESTORY IDLE RPG – ARCH MAGE (ICE/LIGHTNING) SKILL BUILDS – LEVEL $Level")
-    $lines.Add("Maple Levels test build v$AppVersion")
+    $lines.Add("MapleSkills test build v$AppVersion")
     $lines.Add("")
     $lines.Add("CONFIDENCE")
     $lines.Add((Get-Confidence $Level))
@@ -319,7 +319,7 @@ function New-FeedbackEmail {
     if ([string]::IsNullOrWhiteSpace($Recipient) -or $Recipient -notmatch '^[^@\s]+@[^@\s]+\.[^@\s]+$') {
         [System.Windows.Forms.MessageBox]::Show(
             "Enter a valid feedback email address first.",
-            "Maple Levels"
+            "MapleSkills"
         ) | Out-Null
         return
     }
@@ -327,7 +327,7 @@ function New-FeedbackEmail {
     if (-not $script:LastGeneratedFile -or -not (Test-Path $script:LastGeneratedFile)) {
         [System.Windows.Forms.MessageBox]::Show(
             "Generate a skill build first.",
-            "Maple Levels"
+            "MapleSkills"
         ) | Out-Null
         return
     }
@@ -338,12 +338,12 @@ function New-FeedbackEmail {
     catch {
         [System.Windows.Forms.MessageBox]::Show(
             "Could not read the generated build file.",
-            "Maple Levels"
+            "MapleSkills"
         ) | Out-Null
         return
     }
 
-    $subject = "Maple Levels I/L feedback – Level $Level"
+    $subject = "MapleSkills I/L feedback – Level $Level"
 
     # Leave a generous writing area at the very top so testers can type
     # immediately without hunting through the generated build.
@@ -356,7 +356,7 @@ function New-FeedbackEmail {
 PLEASE TYPE ANY EXTRA FEEDBACK ABOVE THIS LINE
 ============================================================
 
-MAPLE LEVELS – GUILD TEST FEEDBACK
+MAPLESKILLS – GUILD TEST FEEDBACK
 
 Character: Arch Mage (Ice/Lightning)
 Level tested: $Level
@@ -400,14 +400,14 @@ $buildText
     catch {
         [System.Windows.Forms.MessageBox]::Show(
             "Could not open your email program.`r`n`r`nThe generated build is still saved here:`r`n$script:LastGeneratedFile",
-            "Maple Levels"
+            "MapleSkills"
         ) | Out-Null
     }
 }
 
 # ---------------- GUI ----------------
 $form = New-Object System.Windows.Forms.Form
-$form.Text = "Maple Levels – I/L Mage Guild Tester v$AppVersion"
+$form.Text = "MapleSkills – I/L Mage Guild Tester v$AppVersion"
 $form.Size = New-Object System.Drawing.Size(760,720)
 $form.StartPosition = "CenterScreen"
 $form.FormBorderStyle = "FixedDialog"
@@ -415,7 +415,7 @@ $form.MaximizeBox = $false
 $form.Font = New-Object System.Drawing.Font("Segoe UI",10)
 
 $title = New-Object System.Windows.Forms.Label
-$title.Text = "MAPLE LEVELS"
+$title.Text = "MAPLESKILLS"
 $title.Font = New-Object System.Drawing.Font("Segoe UI",20,[System.Drawing.FontStyle]::Bold)
 $title.AutoSize = $true
 $title.Location = New-Object System.Drawing.Point(24,20)
@@ -541,13 +541,13 @@ $form.Controls.Add($foot)
 $generate.Add_Click({
     $level = [int]$levelBox.Value
     $folder = Get-OutputFolder
-    $file = Join-Path $folder ("MapleLevels_ILM_Lv{0}.txt" -f $level)
+    $file = Join-Path $folder ("MapleSkills_ILM_Lv{0}.txt" -f $level)
     $report = Make-Report $level
     [System.IO.File]::WriteAllText($file,$report,[System.Text.UTF8Encoding]::new($true))
     $script:LastGeneratedFile = $file
     $status.Text = "DONE – Level $level generated.`r`n`r`n$file"
     Start-Process explorer.exe -ArgumentList "/select,`"$file`""
-    [System.Windows.Forms.MessageBox]::Show("Skill build generated.`r`n`r`n$file","Maple Levels") | Out-Null
+    [System.Windows.Forms.MessageBox]::Show("Skill build generated.`r`n`r`n$file","MapleSkills") | Out-Null
 })
 
 $preview.Add_Click({
@@ -573,7 +573,7 @@ Lv.115 Elquines
 PASSIVE / MECHANIC CHECKS
 Lv.35, 66, 72, 74, 75, 100, 117, 120, 125
 "@
-    [System.Windows.Forms.MessageBox]::Show($msg,"Maple Levels – Breakpoints") | Out-Null
+    [System.Windows.Forms.MessageBox]::Show($msg,"MapleSkills – Breakpoints") | Out-Null
 })
 
 [void]$form.ShowDialog()
