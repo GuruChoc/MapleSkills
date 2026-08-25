@@ -1,63 +1,63 @@
 # MapleSkills
 
-**MapleStory Idle RPG – Skill Build Generator**
+**MapleStory Idle RPG – Community Skill Build Generator**
 
-Current public test build: **v0.6 – Arch Mage (Ice/Lightning)**
+Current public release: **v0.7**
 
-MapleSkills generates scenario-specific skill builds for your current character level.
-The I/L Mage test build supports **Level 1 through Level 125** and progressively
-changes the available build as skills unlock.
+MapleSkills is an unofficial, community-sourced skill-build tool for MapleStory Idle RPG.
+
+## Important community warning
+
+The builds in MapleSkills are **community-derived starting points**. They are not official Nexon recommendations and they are not guaranteed to be optimal.
+
+Balance patches, account strength, skill levels, equipment, timing, content mechanics and new player testing can all change the best order.
+
+Corrections and better-performing community results are always welcome.
+
+## Current class coverage
+
+All 14 current classes are exposed in the selector:
+
+Hero, Paladin, Dark Knight, Arch Mage (Ice/Lightning), Arch Mage (Fire/Poison), Bishop, Bowmaster, Marksman, Night Lord, Shadower, Buccaneer, Corsair, Night Walker and Wind Archer.
+
+Some classes have stronger current community evidence than others. MapleSkills labels builds as **COMMUNITY BASELINE** or **COMMUNITY DRAFT** rather than pretending every tree is equally settled.
+
+## Versioning
+
+`VERSION.txt` is the **authoritative version source**.
+
+The application reads it at runtime. Git tags, GitHub Releases, release ZIP names and README version information should agree with it.
+
+Current version: **v0.7**
 
 ## Download
 
-Click **Code → Download ZIP** on this GitHub repository.
+https://github.com/GuruChoc/MapleSkills/releases
+
+Download the latest `MapleSkills_vX.Y.zip`.
 
 ## Run
 
-1. Extract the downloaded ZIP.
-2. Double-click `Run_MapleSkills_ILM_v0.6.bat`.
-3. Choose your current level.
-4. Click **GENERATE SKILL BUILDS**.
-5. A `.txt` build is generated and selected in Explorer.
-6. Add GOOD / BAD feedback if you want.
-7. Click **EMAIL FEEDBACK + INCLUDE BUILD**.
+1. Extract the release ZIP.
+2. Double-click `Run_MapleSkills.bat`.
+3. Choose class and level.
+4. Click **GENERATE COMMUNITY SKILL BUILDS**.
 
-Feedback defaults to **maple@arcadeheaven.com**.
+## Feedback
 
-The complete generated build is pasted directly into the email body with blank
-space at the top for extra comments. No attachment is required.
+**maple@arcadeheaven.com**
 
-## Build confidence
+Useful feedback: class, level, scenario, old order, changed order, and whether the change performed better or worse.
 
-- **Levels 1–99 – THEORYCRAFT**  
-  Exact unlock data is sourced; early scenario ordering is inferred.
+## Sources / references
 
-- **Levels 100–114 – HYBRID**  
-  Current 4th-job community structure is filtered to skills unlocked at that level.
+See [`SOURCES.md`](SOURCES.md).
 
-- **Levels 115+ – COMMUNITY BASELINE**  
-  Current August 2026 I/L content ordering is used as the baseline.
+Core references:
 
-## Feedback wanted
-
-Useful feedback includes:
-
-- Character level
-- Scenario/content tested
-- Skill order that looked wrong
-- What you changed
-- Whether the change performed better or worse
-
-## Current scope
-
-This repository currently contains the **Arch Mage (Ice/Lightning)** guild tester.
-Other classes will be added after the progressive I/L logic has had enough
-real-player testing.
-
-## Sources
-
-- https://maplestoryidle.info/guides/ice-lightning-presets/
 - https://maplestoryidle.info/jobs.html
-- https://idle.maplestorywiki.net/w/Arch_Mage_%28Ice_Lightning%29/Skills
+- https://maplestoryidle.info/guides.html
+- https://idle.maplestorywiki.net/w/Skills
+- https://forum.nexon.com/maplestoryidle/
 
 Unofficial community tool. MapleStory and related names belong to their respective owners.
