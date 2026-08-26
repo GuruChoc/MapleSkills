@@ -2,7 +2,7 @@
 
 **MapleStory Idle RPG – Community Skill Build Generator**
 
-Current public release: **v0.7**
+Current public release: **v0.7.1**
 
 MapleSkills is an unofficial, community-sourced skill-build tool for MapleStory Idle RPG.
 
@@ -28,7 +28,7 @@ Some classes have stronger current community evidence than others. MapleSkills l
 
 The application reads it at runtime. Git tags, GitHub Releases, release ZIP names and README version information should agree with it.
 
-Current version: **v0.7**
+Current version: **v0.7.1**
 
 ## Download
 
