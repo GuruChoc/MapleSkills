@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.8.1 - 2026-09-01
+
+Compact / Individual display modes.
+
+- Added Compact and Individual views over the same scenario/template data.
+- Compact view shows each unique build template once and lists every mapped scenario.
+- Individual view shows every scenario separately with its mapped template and full skill order.
+- Compact remains the default for quick in-game preset setup.
+- Preserved scenario-specific validation instead of promoting it to shared-template truth.
+- Preserved inactive/rotating scenarios in both views.
+- Preserved Auto-use as part of the preset model.
+- No duplicate skill arrays are created for the two display modes.
+
 ## v0.8.0 - 2026-09-01
 
 Level-aware scenario preset architecture and KISS interface.

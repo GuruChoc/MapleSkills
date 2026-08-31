@@ -2,7 +2,7 @@
 
 **MapleStory Idle RPG – Community Skill Build Generator**
 
-Current public release: **v0.8.0**
+Current public release: **v0.8.1**
 
 MapleSkills is an unofficial, community-sourced skill-build tool for MapleStory Idle RPG.
 
@@ -13,6 +13,16 @@ The builds in MapleSkills are **community-derived starting points**. They are no
 Balance patches, account strength, skill levels, equipment, timing, content mechanics and new player testing can all change the best order.
 
 Corrections and better-performing community results are always welcome.
+
+## v0.8.1 highlights
+
+- Added **Compact** and **Individual** skill-tree display modes.
+- **Compact** is the default and shows each unique build template once with every scenario that uses it.
+- **Individual** shows every scenario separately with its mapped template and complete skill order.
+- Both views use the same underlying build-template and scenario-mapping data; no duplicate preset arrays are created.
+- Scenario-specific validation remains attached to the scenario rather than being blindly applied to every scenario sharing a template.
+- Inactive/rotating scenarios remain visible and preparable.
+- Auto-use remains part of the preset model in both views.
 
 ## v0.8.0 highlights
 
@@ -41,7 +51,7 @@ The new level-aware scenario-template system is currently populated for Arch Mag
 
 The application reads it at runtime. Git tags, GitHub Releases, release ZIP names and README version information must agree with it.
 
-Current version: **v0.8.0**
+Current version: **v0.8.1**
 
 ## Download
 
@@ -55,7 +65,8 @@ Download the latest `MapleSkills_vX.Y.Z.zip`.
 2. Double-click `Run_MapleSkills.bat`.
 3. Choose your character.
 4. Choose your level.
-5. Click **GENERATE ALL SKILL TREES**.
+5. Choose **Compact** or **Individual** view. Compact is the default.
+6. Click **GENERATE ALL SKILL TREES**.
 
 ## Feedback
 

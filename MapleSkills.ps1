@@ -260,13 +260,14 @@ function Test-ILPreset([object[]]$Entries,[int]$Level) {
     return $issues.ToArray()
 }
 
-function Make-ILReport([int]$Level) {
+function Make-ILIndividualReport([int]$Level) {
     $lines = New-Object System.Collections.Generic.List[string]
 
     $lines.Add("MAPLESTORY IDLE RPG - MAPLESKILLS")
     $lines.Add("MapleSkills v$AppVersion")
     $lines.Add("Class: Arch Mage (Ice/Lightning)")
     $lines.Add("Character level: $Level")
+    $lines.Add("View: INDIVIDUAL")
     $lines.Add("")
     $lines.Add("ALL AVAILABLE SKILL TREES")
     $lines.Add("")
@@ -343,9 +344,116 @@ function Make-ILReport([int]$Level) {
     return ($lines -join [Environment]::NewLine)
 }
 
-function Make-Report([string]$ClassName,[int]$Level) {
+
+function Make-ILCompactReport([int]$Level) {
+    $lines = New-Object System.Collections.Generic.List[string]
+
+    $lines.Add("MAPLESTORY IDLE RPG - MAPLESKILLS")
+    $lines.Add("MapleSkills v$AppVersion")
+    $lines.Add("Class: Arch Mage (Ice/Lightning)")
+    $lines.Add("Character level: $Level")
+    $lines.Add("View: COMPACT")
+    $lines.Add("")
+    $lines.Add("UNIQUE SKILL TREES")
+    $lines.Add("")
+
+    # Only show each unique template once.
+    foreach($templateId in @(
+        "HUNT_FARMING",
+        "BREAKTHROUGH",
+        "DIRECT_BOSS",
+        "MIXED_PVE",
+        "MOVEMENT_BOSS",
+        "PVP",
+        "GUILD_RAID_ZAKUM"
+    )) {
+        $template = Get-ILTemplateForLevel $templateId $Level
+        $mappedScenarios = @($ILScenarios | Where-Object {
+            $_.RecommendedTemplate -eq $templateId -and $_.RequiresSkillPreset
+        })
+
+        if ($mappedScenarios.Count -eq 0) { continue }
+
+        $entries = New-Object System.Collections.Generic.List[object]
+        $slot = 1
+        foreach($name in $template.OrderedSkills) {
+            if (-not $ILSkillByName.ContainsKey($name)) { continue }
+            $s = $ILSkillByName[$name]
+            $entries.Add([pscustomobject]@{
+                SkillId=$s.Id
+                SkillName=$s.SkillName
+                Slot=$slot
+                Equipped=$true
+                AutoUse="UNKNOWN"
+                UnlockLevel=$s.UnlockLevel
+                SkillCategory=$s.SkillCategory
+                BasicAttackGroup=$s.BasicAttackGroup
+                TimingRole=$s.TimingRole
+            })
+            $slot++
+        }
+
+        $entryArray = $entries.ToArray()
+        $issues = @(Test-ILPreset -Entries $entryArray -Level $Level)
+
+        $lines.Add("============================================================")
+        $lines.Add($template.Label)
+        $lines.Add("============================================================")
+        $lines.Add("Level: $Level")
+        $lines.Add("Status: $($template.PresetStatus)")
+        if ($template.Notes) { $lines.Add("Template note: $($template.Notes)") }
+        $lines.Add("")
+
+        foreach($e in $entryArray) {
+            $lines.Add(("{0,2}. {1}" -f $e.Slot,$e.SkillName))
+        }
+
+        $lines.Add("")
+        $lines.Add("USE FOR:")
+        foreach($scenario in $mappedScenarios) {
+            $suffix = ""
+            if (-not $scenario.CurrentlyLive) {
+                $suffix = "  [Inactive / $($scenario.AvailabilityType)]"
+            }
+            $lines.Add(" - $($scenario.ScenarioName)$suffix")
+        }
+
+        $lines.Add("")
+        $lines.Add("Auto-use: UNKNOWN unless explicitly sourced.")
+        if ($issues.Count -eq 0) {
+            $lines.Add("Legality: PASS")
+        } else {
+            $lines.Add("Legality: FAIL")
+            foreach($i in $issues) { $lines.Add(" - $i") }
+        }
+
+        # Validation remains scenario-specific even in Compact view.
+        $validationScenarios = @($mappedScenarios | Where-Object {
+            $ValidationHistory.ContainsKey($_.ScenarioId)
+        })
+        if ($validationScenarios.Count -gt 0) {
+            $lines.Add("")
+            $lines.Add("SCENARIO-SPECIFIC VALIDATION")
+            foreach($scenario in $validationScenarios) {
+                $lines.Add($scenario.ScenarioName + ":")
+                foreach($v in $ValidationHistory[$scenario.ScenarioId]) {
+                    $lines.Add((" - {0}: {1} ({2})" -f $v.Label,$v.Result,$v.Date))
+                }
+            }
+        }
+
+        $lines.Add("")
+    }
+
+    return ($lines -join [Environment]::NewLine)
+}
+
+function Make-Report([string]$ClassName,[int]$Level,[string]$ViewMode) {
     if ($ClassName -eq "Arch Mage (Ice/Lightning)") {
-        return Make-ILReport $Level
+        if ($ViewMode -eq "Individual") {
+            return Make-ILIndividualReport $Level
+        }
+        return Make-ILCompactReport $Level
     }
 
     $lines = @(
@@ -353,6 +461,7 @@ function Make-Report([string]$ClassName,[int]$Level) {
         "MapleSkills v$AppVersion",
         "Class: $ClassName",
         "Character level: $Level",
+        "View: $ViewMode",
         "",
         "COMMUNITY DATA UPDATE REQUIRED",
         "",
@@ -377,7 +486,7 @@ function Get-OutputFolder {
 
 $form=New-Object System.Windows.Forms.Form
 $form.Text="$AppName v$AppVersion"
-$form.Size=New-Object System.Drawing.Size(620,360)
+$form.Size=New-Object System.Drawing.Size(620,430)
 $form.StartPosition="CenterScreen"
 $form.MaximizeBox=$false
 $form.FormBorderStyle="FixedDialog"
@@ -390,7 +499,7 @@ $title.AutoSize=$true
 $form.Controls.Add($title)
 
 $sub=New-Object System.Windows.Forms.Label
-$sub.Text="Pick your character and level. Generate all available skill trees."
+$sub.Text="Pick character, level and view. Compact is the default."
 $sub.Location=New-Object System.Drawing.Point(29,65)
 $sub.Size=New-Object System.Drawing.Size(540,30)
 $form.Controls.Add($sub)
@@ -421,11 +530,31 @@ $levelBox.Maximum=125
 $levelBox.Value=110
 $levelBox.Location=New-Object System.Drawing.Point(410,140)
 $levelBox.Size=New-Object System.Drawing.Size(120,30)
+
 $form.Controls.Add($levelBox)
+
+$viewLabel=New-Object System.Windows.Forms.Label
+$viewLabel.Text="View"
+$viewLabel.Location=New-Object System.Drawing.Point(30,195)
+$viewLabel.AutoSize=$true
+$form.Controls.Add($viewLabel)
+
+$compactRadio=New-Object System.Windows.Forms.RadioButton
+$compactRadio.Text="Compact"
+$compactRadio.Location=New-Object System.Drawing.Point(90,193)
+$compactRadio.AutoSize=$true
+$compactRadio.Checked=$true
+$form.Controls.Add($compactRadio)
+
+$individualRadio=New-Object System.Windows.Forms.RadioButton
+$individualRadio.Text="Individual"
+$individualRadio.Location=New-Object System.Drawing.Point(190,193)
+$individualRadio.AutoSize=$true
+$form.Controls.Add($individualRadio)
 
 $gen=New-Object System.Windows.Forms.Button
 $gen.Text="GENERATE ALL SKILL TREES"
-$gen.Location=New-Object System.Drawing.Point(30,215)
+$gen.Location=New-Object System.Drawing.Point(30,260)
 $gen.Size=New-Object System.Drawing.Size(500,60)
 $form.Controls.Add($gen)
 
@@ -433,10 +562,11 @@ $gen.Add_Click({
     try {
         $className=$classBox.SelectedItem.ToString()
         $level=[int]$levelBox.Value
-        $txt=Make-Report -ClassName $className -Level $level
+        $viewMode = if ($individualRadio.Checked) { "Individual" } else { "Compact" }
+        $txt=Make-Report -ClassName $className -Level $level -ViewMode $viewMode
         $folder=Get-OutputFolder
         $safeClass=($className -replace '[^A-Za-z0-9]+','_').Trim('_')
-        $path=Join-Path $folder ("MapleSkills_{0}_Lv{1}_v{2}.txt" -f $safeClass,$level,$AppVersion)
+        $path=Join-Path $folder ("MapleSkills_{0}_Lv{1}_{2}_v{3}.txt" -f $safeClass,$level,$viewMode,$AppVersion)
         Set-Content -Path $path -Value $txt -Encoding UTF8
         Start-Process explorer.exe -ArgumentList "/select,`"$path`""
     }
